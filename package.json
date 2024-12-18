@@ -14,8 +14,8 @@
   "contributes": {
     "commands": [
       {
-        "command": "peterjm-vs-code-extension.helloWorld",
-        "title": "Hello World"
+        "command": "peterjm-vs-code-extension.openAlternateFile",
+        "title": "Open alternate file"
       }
     ]
   },
