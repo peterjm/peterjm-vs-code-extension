@@ -4,7 +4,7 @@
   "description": "A set of custom commands that I use in VS Code",
   "publisher": "peterjm",
   "repository": "https://github.com/peterjm/peterjm-vs-code-extension",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "engines": {
     "vscode": "^1.96.0"
   },
@@ -18,6 +18,10 @@
       {
         "command": "peterjm-vs-code-extension.openAlternateFile",
         "title": "Open alternate file"
+      },
+      {
+        "command": "peterjm-vs-code-extension.testCurrentFile",
+        "title": "Test current file"
       }
     ]
   },

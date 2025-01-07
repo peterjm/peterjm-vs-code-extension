@@ -2,7 +2,25 @@ import * as vscode from 'vscode';
 import { exec } from 'child_process';
 
 export function activate(context: vscode.ExtensionContext) {
-	const disposable = vscode.commands.registerCommand('peterjm-vs-code-extension.openAlternateFile', () => {
+	context.subscriptions.push(vscode.commands.registerCommand('peterjm-vs-code-extension.testCurrentFile', () => {
+		const editor = vscode.window.activeTextEditor;
+		if (!editor) {
+			vscode.window.showInformationMessage('No active editor');
+			return;
+		}
+
+		const document = editor.document;
+		const fileName = vscode.workspace.asRelativePath(document.fileName);
+
+		let terminal = vscode.window.terminals.find(t => t.name === 'tt');
+		if (!terminal) {
+			terminal = vscode.window.createTerminal('tt');
+		}
+		terminal.show(true);
+		terminal.sendText(`tt ${fileName}`);
+	}));
+
+	context.subscriptions.push(vscode.commands.registerCommand('peterjm-vs-code-extension.openAlternateFile', () => {
 		const editor = vscode.window.activeTextEditor;
 		if (!editor) {
 			vscode.window.showInformationMessage('No active editor');
@@ -13,7 +31,7 @@ export function activate(context: vscode.ExtensionContext) {
 		const fileName = vscode.workspace.asRelativePath(document.fileName);
 		const workspaceUri = vscode.workspace.getWorkspaceFolder(document.uri)!.uri;
 
-		exec(`related-files --number=1 --exclude-self --workspace=${workspaceUri.path} ${fileName}`, (error, stdout, stderr) => {
+		exec(`cd ${workspaceUri.path} && related-files --number=1 --exclude-self ${fileName}`, (error, stdout, stderr) => {
 			if (error) {
 				vscode.window.showErrorMessage(`Error finding alternate file: ${error.message}`);
 				return;
@@ -32,9 +50,7 @@ export function activate(context: vscode.ExtensionContext) {
 				vscode.window.showTextDocument(doc);
 			});
 		});
-	});
-
-	context.subscriptions.push(disposable);
+	}));
 }
 
 export function deactivate() {}
